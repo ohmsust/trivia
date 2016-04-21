@@ -108,6 +108,39 @@ app.get('/trivia/:id', function(req, res) {
 
 
 
+// =======================================================================================
+// POST /trivia/add
+// =======================================================================================
+
+app.post('/moviequiz', function(req, res) {
+	var body = _.pick(req.body, 'question', 'answer', 'image');
+
+	db.moviequiz.create(body).then(function(moviequiz) {
+		res.json(moviequiz.toJSON());
+	}, function(e) {
+		res.status(400).json();
+	});
+});
+
+
+
+// =======================================================================================
+// GET /trivia/:id
+// =======================================================================================
+app.get('/moviequiz/:id', function(req, res) {
+	var moviequizId = parseInt(req.params.id, 10);
+
+	db.moviequiz.findById(moviequizId).then(function(moviequiz) {
+		if (!!moviequiz) {
+			res.json(moviequiz.toJSON());
+		} else {
+			res.status(404).send();
+		}
+	}, function(e) {
+		res.status(500).send();
+	});
+});
+
 
 // GET /todos?completed=false&q=work
 app.get('/todos', function(req, res) {
