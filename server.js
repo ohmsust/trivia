@@ -20,16 +20,13 @@ app.get('/', function(req, res) {
 // =======================================================================================
 
 app.post('/users', function(req, res){
-	
-	res.send(' Todo API Root');
+	var body = _.pick(req.body, 'email', 'password');
 
-	// var body = _.pick(req.body, 'email', 'password');
-
-	// db.user.create(body).then(function (user){
-	// 	res.json(user.toPublicJSON());
-	// }, function(e){
-	// 	res.status(400).json(e);
-	// });
+	db.user.create(body).then(function (user){
+		res.json(user.toPublicJSON());
+	}, function(e){
+		res.status(400).json(e);
+	});
 });
 
 
@@ -68,8 +65,8 @@ app.post('/users/login', function(req, res){
 app.post('/trivia', function(req, res) {
 	var body = _.pick(req.body, 'question', 'answer', 'image');
 
-	db.todo.create(body).then(function(todo) {
-		res.json(todo.toJSON());
+	db.trivia.create(body).then(function(trivia) {
+		res.json(trivia.toJSON());
 	}, function(e) {
 		res.status(400).json();
 	});
@@ -81,11 +78,11 @@ app.post('/trivia', function(req, res) {
 // GET /trivia/:id
 // =======================================================================================
 app.get('/trivia/:id', function(req, res) {
-	var todoId = parseInt(req.params.id, 10);
+	var triviaId = parseInt(req.params.id, 10);
 
-	db.todo.findById(todoId).then(function(todo) {
-		if (!!todo) {
-			res.json(todo.toJSON());
+	db.trivia.findById(triviaId).then(function(trivia) {
+		if (!!trivia) {
+			res.json(trivia.toJSON());
 		} else {
 			res.status(404).send();
 		}
