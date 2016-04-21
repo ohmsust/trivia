@@ -23,4 +23,5 @@ db.todo = sequelize.import(__dirname + '/models/trivia.js');
 db.profile = sequelize.import(__dirname + '/models/user_profile.js');
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
 module.exports = db;
