@@ -12,7 +12,8 @@ var todoNext = 1;
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	res.send(' Todo API Root');
+	// res.sendfile('./public/index.html');
+	res.sendFile(__dirname + '/public/index.html');
 })
 
 // =======================================================================================
@@ -109,7 +110,7 @@ app.get('/trivia/:id', function(req, res) {
 
 
 // =======================================================================================
-// POST /trivia/add
+// POST /moviequiz/add
 // =======================================================================================
 
 app.post('/moviequiz', function(req, res) {
@@ -125,7 +126,7 @@ app.post('/moviequiz', function(req, res) {
 
 
 // =======================================================================================
-// GET /trivia/:id
+// GET /moviequiz/:id
 // =======================================================================================
 app.get('/moviequiz/:id', function(req, res) {
 	var moviequizId = parseInt(req.params.id, 10);
@@ -139,6 +140,49 @@ app.get('/moviequiz/:id', function(req, res) {
 	}, function(e) {
 		res.status(500).send();
 	});
+});
+
+
+// =======================================================================================
+// GET /moviequiz/all
+// =======================================================================================
+
+app.get('/moviequiz/:id', function(req, res) {
+	var moviequizId = parseInt(req.params.id, 10);
+
+	db.moviequiz.findById(moviequizId).then(function(moviequiz) {
+		if (!!moviequiz) {
+			res.json(moviequiz.toJSON());
+		} else {
+			res.status(404).send();
+		}
+	}, function(e) {
+		res.status(500).send();
+	});
+});
+
+
+
+
+app.delete('/moviequiz/:id', function(req, res) {
+	var moviequizId = parseInt(req.params.id, 10);
+
+	db.moviequiz.destroy({
+		where: {
+			id: moviequizId
+		}
+	}).then(function(rowsDeleted) {
+		if (rowsDeleted === 0) {
+			res.status(404).json({
+				error: 'No moviequiz with id'
+			});
+		} else {
+			res.status(204).send();
+		}
+	}, function() {
+		res.status(500).send();
+	});
+
 });
 
 

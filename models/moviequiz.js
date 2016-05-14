@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('trivia', {
+	return sequelize.define('moviequiz', {
 		question: {
 			type: DataTypes.STRING,
 			allowNull: false,
