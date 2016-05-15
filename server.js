@@ -58,21 +58,125 @@ app.post('/users/login', function(req, res){
 
 });
 
-
 // =======================================================================================
-// POST /trivia/add
+// POST /app_users
 // =======================================================================================
 
-app.post('/trivia', function(req, res) {
-	var body = _.pick(req.body, 'question', 'answer', 'image');
+app.post('/app_users', function(req, res){
+	var body = _.pick(req.body, 'user_fia', 'game_id', 'current_level', 'sessions', 'in_app_purchases', 'user_country');
 
-	db.trivia.create(body).then(function(trivia) {
-		res.json(trivia.toJSON());
-	}, function(e) {
-		res.status(400).json();
+	db.app_users.create(body).then(function (app_users){
+		res.json(app_users.toPublicJSON());
+	}, function(e){
+		res.status(400).json(e);
 	});
 });
 
+// =======================================================================================
+// GET /app_users/:user_fia/:game_id
+// =======================================================================================
+
+app.get('/app_users/:user_fia/:game_id', function(req, res){
+	// var body = _.pick(req.body, 'user_fia', 'game_id', 'current_level', 'sessions', 'in_app_purchases', 'user_country');
+
+	var user_fia = req.params.user_fia;
+	var game_id = req.params.game_id;
+	
+	var attributes = {};
+
+	console.log(req.params.user_fia, req.params.game_id);
+
+	var selector = { where: {
+						user_fia: user_fia,
+						game_id: game_id 
+						} 
+					};
+
+
+	db.app_users.findOne(selector).then(function(app_users) {
+			if (app_users) {
+				res.json(app_users.toPrivateJSON());
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
+
+// =======================================================================================
+// POST /app_users
+// =======================================================================================
+
+app.put('/app_users', function(req, res){
+	var body = _.pick(req.body, 'user_fia', 'game_id', 'current_level', 'sessions', 'in_app_purchases', 'user_country');
+
+	var user_fia = body.user_fia;
+	var game_id = body.game_id;
+
+	
+	var attributes = {};
+
+	if (body.hasOwnProperty('current_level')) {
+		attributes.current_level = body.current_level;
+	}
+
+	if (body.hasOwnProperty('sessions')) {
+		attributes.sessions = body.sessions;
+	}
+
+	if (body.hasOwnProperty('in_app_purchases')) {
+		attributes.in_app_purchases = body.in_app_purchases;
+	}
+
+	if (body.hasOwnProperty('user_country')) {
+		attributes.user_country = body.user_country;
+	}
+
+	var selector = { where: {
+						user_fia: user_fia,
+						game_id: game_id 
+						} 
+					};
+
+
+	db.app_users.findOne(selector).then(function(app_users) {
+			if (app_users) {
+				app_users.update(attributes, selector).then(function(app_users) {
+					res.json(app_users.toPublicJSON());
+				}, function(e) {
+					res.status(400).json(e);
+				});
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
+
+
+// =======================================================================================
+// POST /review
+// =======================================================================================
+
+app.post('/reviews', function(req, res){
+	var body = _.pick(req.body, 'game_id', 'version_no', 'ask_review', 'offer_value');
+
+	console.log(req.params.game_id, req.params.version_no);
+
+	db.reviews.create(body).then(function(reviews) {
+			if (reviews) {
+				res.json(reviews.toPrivateJSON());
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
 
 
 // =======================================================================================
