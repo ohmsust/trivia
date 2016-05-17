@@ -179,6 +179,35 @@ app.post('/reviews', function(req, res){
 });
 
 // =======================================================================================
+// DEL /review
+// =======================================================================================
+
+app.delete('/reviews/:game_id', function(req, res){
+
+	var game_id = req.params.game_id;
+	
+	console.log(req.params.game_id, req.params.version_no);
+
+	var selector = { where: {
+						game_id: game_id 
+						} 
+					};
+
+	db.reviews.destroy(selector).then(function(reviews) {
+			if (rowsDeleted == 0) {
+				res.status(404).json({
+				error: 'No todo with id'
+			});
+			} else {
+				res.status(204).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
+
+// =======================================================================================
 // GET /review
 // =======================================================================================
 
