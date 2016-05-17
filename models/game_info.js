@@ -2,7 +2,7 @@ var _ = require('underscore');
 var bcrypt = require('bcrypt');
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('review', {
+	return sequelize.define('game_info', {
 		game_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -10,17 +10,25 @@ module.exports = function(sequelize, DataTypes) {
 				len: [1, 250]
 			}
 		},
-		version_no: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: '1.0'
 		},
-		ask_review: {
-			type: DataTypes.BOOLEAN,
+		current_version: {
+			type: DataTypes.STRING,
 			allowNull: false,
-			defaultValue: false
+			defaultValue: '1.0'
 		},
-		offer_value: {
+		category: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			defaultValue: 'Trivia',
+			validate: {
+				len: [1, 250]
+			}
+		},
+		in_app_purchase: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
@@ -32,11 +40,11 @@ module.exports = function(sequelize, DataTypes) {
 		instanceMethods:  {
 			toPublicJSON: function () {
 				var json = this.toJSON();
-				return _.pick(json, 'id', 'game_id', 'version_no', 'ask_review', 'offer_value', 'createdAt', 'updatedAt');
+				return _.pick(json, 'id', 'game_id', 'name', 'current_version', 'category', 'in_app_purchase', 'createdAt', 'updatedAt');
 			},
 			toPrivateJSON: function () {
 				var json = this.toJSON();
-				return _.pick(json, 'id', 'game_id', 'version_no', 'ask_review', 'offer_value', 'createdAt', 'updatedAt');
+				return _.pick(json, 'id', 'game_id', 'name', 'current_version', 'category', 'in_app_purchase', 'createdAt', 'updatedAt');
 			}
 		}
 	}

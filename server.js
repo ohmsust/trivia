@@ -178,6 +178,81 @@ app.post('/reviews', function(req, res){
 		});
 });
 
+// =======================================================================================
+// GET /review
+// =======================================================================================
+
+app.get('/reviews/:game_id', function(req, res){
+
+	var game_id = req.params.game_id;
+	
+	console.log(req.params.game_id, req.params.version_no);
+
+	var selector = { where: {
+						game_id: game_id 
+						} 
+					};
+
+	db.reviews.findOne(selector).then(function(reviews) {
+			if (reviews) {
+				res.json(reviews.toPrivateJSON());
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
+
+// =======================================================================================
+// PUT /review
+// =======================================================================================
+
+app.put('/reviews', function(req, res){
+
+	var body = _.pick(req.body, 'game_id', 'version_no', 'ask_review', 'offer_value');
+
+	var game_id = body.game_id;
+	
+	var attributes = {};
+
+	console.log(req.params.game_id, req.params.version_no);
+
+
+	if (body.hasOwnProperty('version_no')) {
+		attributes.version_no = body.version_no;
+	}
+
+	if (body.hasOwnProperty('ask_review')) {
+		attributes.ask_review = body.ask_review;
+	}
+
+	if (body.hasOwnProperty('offer_value')) {
+		attributes.offer_value = body.offer_value;
+	}
+
+
+	var selector = { where: {
+						game_id: game_id 
+						} 
+					};
+
+	db.reviews.findOne(selector).then(function(reviews) {
+			if (reviews) {
+				reviews.update(attributes, selector).then(function(reviews) {
+					res.json(reviews.toPublicJSON());
+				}, function(e) {
+					res.status(400).json(e);
+				});
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
 
 // =======================================================================================
 // GET /trivia/:id

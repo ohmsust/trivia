@@ -17,12 +17,15 @@ if (env === 'production') {
 
 var db = {};
 
-db.todo = sequelize.import(__dirname + '/models/todo.js');
 db.user = sequelize.import(__dirname + '/models/user.js');
 db.app_users = sequelize.import(__dirname + '/models/app_users.js');
+db.cross_promo = sequelize.import(__dirname + '/models/cross_promo.js');
+db.cross_promo_validate = sequelize.import(__dirname + '/models/cross_promo_validate.js');
+db.cross_promo_validate = sequelize.import(__dirname + '/models/in_app_purchse_offer.js');
+db.cross_promo_validate = sequelize.import(__dirname + '/models/in_app_purchse_offer_validate.js');
 db.reviews = sequelize.import(__dirname + '/models/reviews.js');
+db.game_info = sequelize.import(__dirname + '/models/game_info.js');
 db.trivia = sequelize.import(__dirname + '/models/trivia.js');
-db.moviequiz = sequelize.import(__dirname + '/models/moviequiz.js');
 db.profile = sequelize.import(__dirname + '/models/user_profile.js');
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
