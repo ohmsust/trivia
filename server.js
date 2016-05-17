@@ -193,7 +193,7 @@ app.delete('/reviews/:game_id', function(req, res){
 						} 
 					};
 
-	db.reviews.destroy(selector).then(function(reviews) {
+	db.reviews.destroy(selector).then(function(rowsDeleted) {
 			if (rowsDeleted == 0) {
 				res.status(404).json({
 				error: 'No todo with id'
