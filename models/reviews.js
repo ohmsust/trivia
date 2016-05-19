@@ -8,7 +8,8 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			unique:true,
 			validate: {
-				len: [1, 250]
+				len: [1, 250],
+				isUnique: sequelize.validateIsUnique('game_id', 'already exists...')
 			}
 		},
 		version_no: {

@@ -174,7 +174,7 @@ app.post('/reviews', function(req, res){
 				res.status(404).send();
 			}
 		}, function() {
-			res.status(500).send();
+			res.status(500).send('Reveiw could not be created, it may already exists');
 		});
 });
 
@@ -225,6 +225,32 @@ app.get('/reviews/:game_id', function(req, res){
 	db.reviews.findOne(selector).then(function(reviews) {
 			if (reviews) {
 				res.json(reviews.toPrivateJSON());
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+});
+
+// =======================================================================================
+// GET /all review
+// =======================================================================================
+
+app.get('/reviews/ask_review/:ask_review', function(req, res){
+
+	var ask_review = req.params.ask_review;
+	
+	console.log(req.params.ask_review, req.params.version_no);
+
+	var selector = { where: {
+						ask_review: ask_review 
+						} 
+					};
+
+	db.reviews.findAll(selector).then(function(reviews) {
+			if (reviews) {
+				res.json(reviews);
 			} else {
 				res.status(404).send();
 			}

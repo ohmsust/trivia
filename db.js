@@ -1,4 +1,5 @@
 var Sequelize = require('sequelize');
+require('sequelize-isunique-validator')(Sequelize);
 var env = process.env.NODE_ENV || 'development';
 var sequelize;
 
