@@ -165,17 +165,20 @@ app.put('/app_users', function(req, res){
 app.post('/reviews', function(req, res){
 	var body = _.pick(req.body, 'game_id', 'version_no', 'ask_review', 'offer_value');
 
-	console.log(req.params.game_id, req.params.version_no);
+	// console.log(req.params.game_id, req.params.version_no);
 
 	db.reviews.create(body).then(function(reviews) {
-			if (reviews) {
-				res.json(reviews);
-			} else {
-				res.status(404).send();
-			}
+			res.json(reviews.toPublicJSON());
 		}, function() {
 			res.status(500).send('Reveiw could not be created, it may already exists');
 		});
+
+
+	// db.cross_promo.create(body).then(function (cross_promo){
+	// 	res.json(cross_promo.toPublicJSON());
+	// }, function(e){
+	// 	res.status(400).json(e);
+	// });
 });
 
 // =======================================================================================
