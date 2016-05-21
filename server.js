@@ -106,7 +106,7 @@ app.get('/app_users/:user_fia/:game_id', function(req, res){
 
 
 // =======================================================================================
-// POST /app_users
+// PUT /app_users
 // =======================================================================================
 
 app.put('/app_users', function(req, res){
@@ -306,6 +306,129 @@ app.put('/reviews', function(req, res){
 		}, function() {
 			res.status(500).send();
 		});
+});
+
+
+
+// =======================================================================================
+// POST /cross_promo/ Cross Promotion
+// =======================================================================================
+app.post('/cross_promo', function(req, res){
+	var body = _.pick(req.body, 'game_id', 'level_no', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url');
+
+	db.cross_promo.create(body).then(function (cross_promo){
+		res.json(cross_promo.toPublicJSON());
+	}, function(e){
+		res.status(400).json(e);
+	});
+});
+
+// =======================================================================================
+// GET /cross_promo/ Cross Promotion
+// =======================================================================================
+app.get('/cross_promo', function(req, res){
+	// var body = _.pick(req.body, 'game_id', 'level_no', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url');
+
+	db.cross_promo.findAll().then(function (cross_promo){
+		res.json(cross_promo);
+	}, function(e){
+		res.status(400).json(e);
+	});
+});
+
+
+// =======================================================================================
+// GET /cross_promo/:game_id Cross Promotion by Game_ID
+// =======================================================================================
+app.get('/cross_promo/:game_id', function(req, res){
+	
+	var game_id = req.params.game_id;
+	var selector = { where: {
+						game_id: game_id 
+						} 
+					};
+	db.cross_promo.findAll(selector).then(function (cross_promo){
+		res.json(cross_promo);
+	}, function(e){
+		res.status(400).json(e);
+	});
+});
+
+
+// =======================================================================================
+// GET /cross_promo/:game_id Cross Promotion by Game_ID
+// =======================================================================================
+app.get('/cross_promo/:game_id/:level_no', function(req, res){
+	
+	var game_id = req.params.game_id;
+	var level_no = req.params.level_no;
+	var selector = { where: {
+						game_id: game_id,
+						level_no: level_no
+						} 
+					};
+	db.cross_promo.findAll(selector).then(function (cross_promo){
+		res.json(cross_promo);
+	}, function(e){
+		res.status(400).json(e);
+	});
+});
+
+
+// =======================================================================================
+// PUT /cross_promo/:game_id Edit/Update Cross Promotion by Game_ID
+// =======================================================================================
+app.put('/cross_promo/:game_id', function(req, res){
+	
+	var body = _.pick(req.body, 'game_id', 'level_no', 'device_type', 'promo_game_id', 'appstore_url','promo_image_url');
+
+	var game_id = body.game_id;
+	
+	var attributes = {};
+
+	console.log(req.params.game_id, req.params.version_no);
+
+
+	if (body.hasOwnProperty('level_no')) {
+		attributes.level_no = body.level_no;
+	}
+
+	if (body.hasOwnProperty('device_type')) {
+		attributes.device_type = body.device_type;
+	}
+
+	if (body.hasOwnProperty('promo_game_id')) {
+		attributes.promo_game_id = body.promo_game_id;
+	}
+
+	if (body.hasOwnProperty('appstore_url')) {
+		attributes.appstore_url = body.appstore_url;
+	}
+
+	if (body.hasOwnProperty('promo_image_url')) {
+		attributes.promo_image_url = body.promo_image_url;
+	}
+
+
+	var selector = { where: {
+						game_id: game_id 
+						} 
+					};
+
+	db.cross_promo.findOne(selector).then(function(cross_promo) {
+			if (cross_promo) {
+				cross_promo.update(attributes, selector).then(function(cross_promo) {
+					res.json(cross_promo);
+				}, function(e) {
+					res.status(400).json(e);
+				});
+			} else {
+				res.status(404).send();
+			}
+		}, function() {
+			res.status(500).send();
+		});
+
 });
 
 

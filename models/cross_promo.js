@@ -10,17 +10,10 @@ module.exports = function(sequelize, DataTypes) {
 				len: [1, 250]
 			}
 		},
-		cross_promo_id: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				len: [1, 250]
-			}
-		},
 		level_no: {
 			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: '1.0'
+			allowNull: true,
+			defaultValue: '10'
 		},
 		device_type: {
 			type: DataTypes.STRING,
@@ -53,11 +46,11 @@ module.exports = function(sequelize, DataTypes) {
 		instanceMethods:  {
 			toPublicJSON: function () {
 				var json = this.toJSON();
-				return _.pick(json, 'id', 'game_id', 'level_no', 'cross_promo_id', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url', 'createdAt', 'updatedAt');
+				return _.pick(json, 'id', 'game_id', 'level_no', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url', 'createdAt', 'updatedAt');
 			},
 			toPrivateJSON: function () {
 				var json = this.toJSON();
-				return _.pick(json, 'id', 'game_id', 'level_no', 'cross_promo_id', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url', 'createdAt', 'updatedAt');
+				return _.pick(json, 'id', 'game_id', 'level_no', 'device_type', 'promo_game_id', 'appstore_url', 'promo_image_url', 'createdAt', 'updatedAt');
 			}
 		}
 	}
