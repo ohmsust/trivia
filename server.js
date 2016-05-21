@@ -169,7 +169,7 @@ app.post('/reviews', function(req, res){
 
 	db.reviews.create(body).then(function(reviews) {
 			if (reviews) {
-				res.json(reviews.toPrivateJSON());
+				res.json(reviews);
 			} else {
 				res.status(404).send();
 			}
@@ -730,7 +730,7 @@ app.put('/todos/:id', function(req, res) {
 
 
 db.sequelize.sync( {
-	force: true
+	force: false
 }).then(function() {
 	app.listen(PORT, function() {
 		console.log('Server started at port ' + PORT + ' ... ... ...')
